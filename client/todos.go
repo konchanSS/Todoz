@@ -21,7 +21,7 @@ import (
 // CreateTodosPath computes a request path to the create action of todos.
 func CreateTodosPath() string {
 
-	return fmt.Sprintf("/todos")
+	return fmt.Sprintf("/todos/")
 }
 
 // Todoの作成

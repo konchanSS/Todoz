@@ -6,6 +6,7 @@ import (
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 	"github.com/konchanSS/Todoz/app"
+	"github.com/konchanSS/Todoz/controller"
 )
 
 func main() {
@@ -19,7 +20,7 @@ func main() {
 	service.Use(middleware.Recover())
 
 	// Mount "todos" controller
-	c := NewTodosController(service)
+	c := controller.NewTodosController(service)
 	app.MountTodosController(service, c)
 
 	// Start service
