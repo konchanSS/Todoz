@@ -54,7 +54,7 @@ func CreateTodosOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 		query["body"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/todos"),
+		Path:     fmt.Sprintf("/todos/"),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)

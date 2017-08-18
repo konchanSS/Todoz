@@ -36,28 +36,6 @@ info:
   title: todoz
   version: ""
 paths:
-  /todos:
-    post:
-      description: Todoの作成
-      operationId: todos#create
-      parameters:
-      - description: body
-        in: query
-        name: body
-        required: true
-        type: string
-      produces:
-      - application/todo.+json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/Todo'
-      schemes:
-      - http
-      summary: create todos
-      tags:
-      - todos
   /todos/:
     delete:
       description: Todoの全削除
@@ -87,6 +65,27 @@ paths:
       schemes:
       - http
       summary: list todos
+      tags:
+      - todos
+    post:
+      description: Todoの作成
+      operationId: todos#create
+      parameters:
+      - description: body
+        in: query
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+      schemes:
+      - http
+      summary: create todos
       tags:
       - todos
   /todos/{id}:

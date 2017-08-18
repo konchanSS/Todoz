@@ -40,7 +40,7 @@ var _ = Resource("todos", func() {
 
 	Action("create", func() {
 		Description("Todoの作成")
-		Routing(POST(""))
+		Routing(POST("/"))
 		Params(func() {
 			Param("body")
 			Required("body")

@@ -79,7 +79,7 @@ func RegisterCommands(app *cobra.Command, c *client.Client) {
 	}
 	tmp1 := new(CreateTodosCommand)
 	sub = &cobra.Command{
-		Use:   `todos ["/todos"]`,
+		Use:   `todos ["/todos/"]`,
 		Short: ``,
 		RunE:  func(cmd *cobra.Command, args []string) error { return tmp1.Run(c, args) },
 	}
@@ -318,7 +318,7 @@ func (cmd *CreateTodosCommand) Run(c *client.Client, args []string) error {
 	if len(args) > 0 {
 		path = args[0]
 	} else {
-		path = "/todos"
+		path = "/todos/"
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)

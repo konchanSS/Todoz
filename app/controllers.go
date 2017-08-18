@@ -47,9 +47,8 @@ type TodosController interface {
 func MountTodosController(service *goa.Service, ctrl TodosController) {
 	initService(service)
 	var h goa.Handler
-	service.Mux.Handle("OPTIONS", "/todos", ctrl.MuxHandler("preflight", handleTodosOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/todos/:id", ctrl.MuxHandler("preflight", handleTodosOrigin(cors.HandlePreflight()), nil))
 	service.Mux.Handle("OPTIONS", "/todos/", ctrl.MuxHandler("preflight", handleTodosOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/todos/:id", ctrl.MuxHandler("preflight", handleTodosOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -64,8 +63,8 @@ func MountTodosController(service *goa.Service, ctrl TodosController) {
 		return ctrl.Create(rctx)
 	}
 	h = handleTodosOrigin(h)
-	service.Mux.Handle("POST", "/todos", ctrl.MuxHandler("create", h, nil))
-	service.LogInfo("mount", "ctrl", "Todos", "action", "Create", "route", "POST /todos")
+	service.Mux.Handle("POST", "/todos/", ctrl.MuxHandler("create", h, nil))
+	service.LogInfo("mount", "ctrl", "Todos", "action", "Create", "route", "POST /todos/")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
