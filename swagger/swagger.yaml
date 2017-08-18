@@ -1,0 +1,171 @@
+consumes:
+- application/json
+- application/xml
+- application/gob
+- application/x-gob
+definitions:
+  Todo:
+    description: Todos (default view)
+    example:
+      body: hoge
+      id: 1
+      is_finished: false
+    properties:
+      body:
+        description: body
+        example: hoge
+        type: string
+      id:
+        description: id
+        example: 1
+        format: int64
+        type: integer
+      is_finished:
+        description: is_finished
+        example: false
+        type: boolean
+    required:
+    - id
+    - body
+    - is_finished
+    title: 'Mediatype identifier: application/todo.+json; view=default'
+    type: object
+host: localhost:8080
+info:
+  description: Treasure mid
+  title: todoz
+  version: ""
+paths:
+  /todos:
+    post:
+      description: Todoの作成
+      operationId: todos#create
+      parameters:
+      - description: body
+        in: query
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+      schemes:
+      - http
+      summary: create todos
+      tags:
+      - todos
+  /todos/:
+    delete:
+      description: Todoの全削除
+      operationId: todos#delete all
+      produces:
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+      schemes:
+      - http
+      summary: delete all todos
+      tags:
+      - todos
+    get:
+      description: TodoList一覧
+      operationId: todos#list
+      produces:
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+      schemes:
+      - http
+      summary: list todos
+      tags:
+      - todos
+  /todos/{id}:
+    delete:
+      description: Todoの削除
+      operationId: todos#delete
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+      schemes:
+      - http
+      summary: delete todos
+      tags:
+      - todos
+    get:
+      description: Todoの詳細
+      operationId: todos#show
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      schemes:
+      - http
+      summary: show todos
+      tags:
+      - todos
+    put:
+      description: Todoの更新
+      operationId: todos#update
+      parameters:
+      - description: body
+        in: query
+        name: body
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: is_finished
+        in: query
+        name: is_finished
+        required: true
+        type: boolean
+      produces:
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+      schemes:
+      - http
+      summary: update todos
+      tags:
+      - todos
+produces:
+- application/json
+- application/xml
+- application/gob
+- application/x-gob
+responses:
+  OK:
+    description: OK
+    schema:
+      $ref: '#/definitions/Todo'
+schemes:
+- http
+swagger: "2.0"
