@@ -4,18 +4,17 @@ import (
 	"github.com/goadesign/goa"
 	"github.com/konchanSS/Todoz/app"
 	"github.com/konchanSS/Todoz/models"
-	"github.com/goadesign/gorma"
 	"github.com/jinzhu/gorm"
 )
 
 // TodosController implements the todos resource.
 type TodosController struct {
 	*goa.Controller
-	db *gorma.DB
+	db *gorm.DB
 }
 
 // NewTodosController creates a todos controller.
-func NewTodosController(service *goa.Service, db *gorma.DB) *TodosController {
+func NewTodosController(service *goa.Service, db *gorm.DB) *TodosController {
 	return &TodosController{
 		Controller: service.NewController("TodosController"),
 		db: db,
@@ -61,6 +60,7 @@ func (c *TodosController) DeleteAll(ctx *app.DeleteAllTodosContext) error {
 	// Put your logic here
 
 	// TodosController_DeleteAll: end_implement
+	res := &app.Todo{}
 	return ctx.OK(res)
 }
 
