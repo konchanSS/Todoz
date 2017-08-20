@@ -26,7 +26,8 @@ var _ = Resource("todos", func() {
 	Action("list", func() {
 		Description("TodoList一覧")
 		Routing(GET("/"))
-		Response(OK)
+		Response(OK,CollectionOf(TodoMediaType))
+		Response(BadRequest, ErrorMedia)
 	})
 
 	Action("show", func() {
@@ -36,6 +37,9 @@ var _ = Resource("todos", func() {
 			Param("id")
 			Required("id")
 		})
+		Response(OK)
+		Response(NotFound)
+		Response(BadRequest, ErrorMedia)
 	})
 
 	Action("create", func() {
@@ -45,7 +49,8 @@ var _ = Resource("todos", func() {
 			Param("body")
 			Required("body")
 		})
-		Response(OK)
+		Response(Created)
+		Response(BadRequest, ErrorMedia)
 	})
 
 	Action("update", func() {
@@ -58,6 +63,8 @@ var _ = Resource("todos", func() {
 			Required("id", "body", "is_finished")
 		})
 		Response(OK)
+		Response(NotFound)
+		Response(BadRequest, ErrorMedia)
 	})
 
 	Action("delete", func() {
@@ -68,12 +75,17 @@ var _ = Resource("todos", func() {
 			Required("id")
 		})
 		Response(OK)
+		Response(NotFound)
+		Response(BadRequest, ErrorMedia)
+
 	})
 
 	Action("delete all", func() {
 		Description("Todoの全削除")
 		Routing(DELETE("/"))
 		Response(OK)
+		Response(BadRequest, ErrorMedia)
+
 	})
 })
 

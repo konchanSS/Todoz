@@ -44,10 +44,16 @@ func NewCreateTodosContext(ctx context.Context, r *http.Request, service *goa.Se
 	return &rctx, err
 }
 
-// OK sends a HTTP response with status code 200.
-func (ctx *CreateTodosContext) OK(r *Todo) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/todo.+json")
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+// Created sends a HTTP response with status code 201.
+func (ctx *CreateTodosContext) Created() error {
+	ctx.ResponseData.WriteHeader(201)
+	return nil
+}
+
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *CreateTodosContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
 // DeleteTodosContext provides the todos delete action context.
@@ -85,6 +91,18 @@ func (ctx *DeleteTodosContext) OK(r *Todo) error {
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *DeleteTodosContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
+}
+
+// NotFound sends a HTTP response with status code 404.
+func (ctx *DeleteTodosContext) NotFound() error {
+	ctx.ResponseData.WriteHeader(404)
+	return nil
+}
+
 // DeleteAllTodosContext provides the todos delete all action context.
 type DeleteAllTodosContext struct {
 	context.Context
@@ -110,6 +128,12 @@ func (ctx *DeleteAllTodosContext) OK(r *Todo) error {
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *DeleteAllTodosContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
+}
+
 // ListTodosContext provides the todos list action context.
 type ListTodosContext struct {
 	context.Context
@@ -130,9 +154,18 @@ func NewListTodosContext(ctx context.Context, r *http.Request, service *goa.Serv
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *ListTodosContext) OK(r *Todo) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/todo.+json")
+func (ctx *ListTodosContext) OK(r TodoCollection) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/todo.+json; type=collection")
+	if r == nil {
+		r = TodoCollection{}
+	}
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *ListTodosContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
 // ShowTodosContext provides the todos show action context.
@@ -162,6 +195,24 @@ func NewShowTodosContext(ctx context.Context, r *http.Request, service *goa.Serv
 		}
 	}
 	return &rctx, err
+}
+
+// OK sends a HTTP response with status code 200.
+func (ctx *ShowTodosContext) OK(r *Todo) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/todo.+json")
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *ShowTodosContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
+}
+
+// NotFound sends a HTTP response with status code 404.
+func (ctx *ShowTodosContext) NotFound() error {
+	ctx.ResponseData.WriteHeader(404)
+	return nil
 }
 
 // UpdateTodosContext provides the todos update action context.
@@ -217,4 +268,16 @@ func NewUpdateTodosContext(ctx context.Context, r *http.Request, service *goa.Se
 func (ctx *UpdateTodosContext) OK(r *Todo) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/todo.+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *UpdateTodosContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
+}
+
+// NotFound sends a HTTP response with status code 404.
+func (ctx *UpdateTodosContext) NotFound() error {
+	ctx.ResponseData.WriteHeader(404)
+	return nil
 }

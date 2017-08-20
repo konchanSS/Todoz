@@ -30,6 +30,59 @@ definitions:
     - is_finished
     title: 'Mediatype identifier: application/todo.+json; view=default'
     type: object
+  TodoCollection:
+    description: TodoCollection is the media type for an array of Todo (default view)
+    example:
+    - body: hoge
+      id: 1
+      is_finished: false
+    - body: hoge
+      id: 1
+      is_finished: false
+    - body: hoge
+      id: 1
+      is_finished: false
+    items:
+      $ref: '#/definitions/Todo'
+    title: 'Mediatype identifier: application/todo.+json; type=collection; view=default'
+    type: array
+  error:
+    description: Error response media type (default view)
+    example:
+      code: invalid_value
+      detail: Value of ID must be an integer
+      id: 3F1FKVRR
+      meta:
+        timestamp: 1.458609e+09
+      status: "400"
+    properties:
+      code:
+        description: an application-specific error code, expressed as a string value.
+        example: invalid_value
+        type: string
+      detail:
+        description: a human-readable explanation specific to this occurrence of the
+          problem.
+        example: Value of ID must be an integer
+        type: string
+      id:
+        description: a unique identifier for this particular occurrence of the problem.
+        example: 3F1FKVRR
+        type: string
+      meta:
+        additionalProperties: true
+        description: a meta object containing non-standard meta-information about
+          the error.
+        example:
+          timestamp: 1.458609e+09
+        type: object
+      status:
+        description: the HTTP status code applicable to this problem, expressed as
+          a string value.
+        example: "400"
+        type: string
+    title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+    type: object
 host: localhost:8080
 info:
   description: Treasure mid
@@ -41,12 +94,17 @@ paths:
       description: Todoの全削除
       operationId: todos#delete all
       produces:
+      - application/vnd.goa.error
       - application/todo.+json
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
       schemes:
       - http
       summary: delete all todos
@@ -56,12 +114,17 @@ paths:
       description: TodoList一覧
       operationId: todos#list
       produces:
-      - application/todo.+json
+      - application/vnd.goa.error
+      - application/todo.+json; type=collection
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/Todo'
+            $ref: '#/definitions/TodoCollection'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
       schemes:
       - http
       summary: list todos
@@ -77,12 +140,14 @@ paths:
         required: true
         type: string
       produces:
-      - application/todo.+json
+      - application/vnd.goa.error
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
           schema:
-            $ref: '#/definitions/Todo'
+            $ref: '#/definitions/error'
       schemes:
       - http
       summary: create todos
@@ -99,12 +164,19 @@ paths:
         required: true
         type: integer
       produces:
+      - application/vnd.goa.error
       - application/todo.+json
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        "404":
+          description: Not Found
       schemes:
       - http
       summary: delete todos
@@ -119,6 +191,20 @@ paths:
         name: id
         required: true
         type: integer
+      produces:
+      - application/vnd.goa.error
+      - application/todo.+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        "404":
+          description: Not Found
       schemes:
       - http
       summary: show todos
@@ -144,12 +230,19 @@ paths:
         required: true
         type: boolean
       produces:
+      - application/vnd.goa.error
       - application/todo.+json
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        "404":
+          description: Not Found
       schemes:
       - http
       summary: update todos
@@ -161,6 +254,10 @@ produces:
 - application/gob
 - application/x-gob
 responses:
+  Created:
+    description: Created
+  NotFound:
+    description: Not Found
   OK:
     description: OK
     schema:

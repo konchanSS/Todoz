@@ -1,0 +1,14 @@
+db:
+  build: .
+  container_name: todoz
+  command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: todoz
+    MYSQL_USER: todoz
+    MYSQL_PASSWORD: todoz
+    TZ: "Asia/Tokyo"
+  ports:
+  - "3306:3306"
+  volumes:
+    - "./mysql:/docker-entrypoint-initdb.d"
