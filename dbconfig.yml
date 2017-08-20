@@ -1,0 +1,5 @@
+development:
+  dialect: mysql
+  datasource: todoz:todoz@tcp(localhost:3306)/todoz?parseTime=true&collation=utf8_general_ci&interpolateParams=true&loc=Asia%2FTokyo&parseTime=True
+  dir: migrations
+  table: migrations
