@@ -35,3 +35,20 @@ func (mt *Todo) Validate() (err error) {
 
 	return
 }
+
+// TodoCollection is the media type for an array of Todo (default view)
+//
+// Identifier: application/todo.+json; type=collection; view=default
+type TodoCollection []*Todo
+
+// Validate validates the TodoCollection media type instance.
+func (mt TodoCollection) Validate() (err error) {
+	for _, e := range mt {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}

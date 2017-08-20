@@ -43,3 +43,34 @@ func (c *Client) DecodeTodo(resp *http.Response) (*Todo, error) {
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
+
+// TodoCollection is the media type for an array of Todo (default view)
+//
+// Identifier: application/todo.+json; type=collection; view=default
+type TodoCollection []*Todo
+
+// Validate validates the TodoCollection media type instance.
+func (mt TodoCollection) Validate() (err error) {
+	for _, e := range mt {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// DecodeTodoCollection decodes the TodoCollection instance encoded in resp body.
+func (c *Client) DecodeTodoCollection(resp *http.Response) (TodoCollection, error) {
+	var decoded TodoCollection
+	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
+	return decoded, err
+}
+
+// DecodeErrorResponse decodes the ErrorResponse instance encoded in resp body.
+func (c *Client) DecodeErrorResponse(resp *http.Response) (*goa.ErrorResponse, error) {
+	var decoded goa.ErrorResponse
+	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
+	return &decoded, err
+}
